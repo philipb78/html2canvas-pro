@@ -48,9 +48,11 @@ export class InputElementContainer extends ElementContainer {
     readonly type: string;
     readonly checked: boolean;
     readonly value: string;
+    readonly element: HTMLInputElement;
 
     constructor(context: Context, input: HTMLInputElement) {
         super(context, input);
+        this.element = input;
         this.type = input.type.toLowerCase();
         this.checked = input.checked;
         this.value = getInputValue(input);

@@ -430,18 +430,48 @@ export class CanvasRenderer extends Renderer {
             if (container.type === CHECKBOX) {
                 if (container.checked) {
                     this.ctx.save();
-                    this.path([
-                        new Vector(container.bounds.left + size * 0.39363, container.bounds.top + size * 0.79),
-                        new Vector(container.bounds.left + size * 0.16, container.bounds.top + size * 0.5549),
-                        new Vector(container.bounds.left + size * 0.27347, container.bounds.top + size * 0.44071),
-                        new Vector(container.bounds.left + size * 0.39694, container.bounds.top + size * 0.5649),
-                        new Vector(container.bounds.left + size * 0.72983, container.bounds.top + size * 0.23),
-                        new Vector(container.bounds.left + size * 0.84, container.bounds.top + size * 0.34085),
-                        new Vector(container.bounds.left + size * 0.39363, container.bounds.top + size * 0.79)
-                    ]);
+                    
+                    // Check if checkbox has 'cross' class for cross display
+                    const element = container.element as HTMLInputElement;
+                    const isCrossCheckbox = element.classList.contains('cross');
+                    
+                    if (isCrossCheckbox) {
+                        // Render cross (X) symbol using vector paths for consistency
+                        // First diagonal line (top-left to bottom-right)
+                        this.path([
+                            new Vector(container.bounds.left + size * 0.2, container.bounds.top + size * 0.2),
+                            new Vector(container.bounds.left + size * 0.8, container.bounds.top + size * 0.8)
+                        ]);
+                        this.ctx.strokeStyle = asString(INPUT_COLOR);
+                        this.ctx.lineWidth = Math.max(1, size * 0.08);
+                        this.ctx.lineCap = 'round';
+                        this.ctx.stroke();
+                        
+                        // Second diagonal line (top-right to bottom-left)
+                        this.path([
+                            new Vector(container.bounds.left + size * 0.8, container.bounds.top + size * 0.2),
+                            new Vector(container.bounds.left + size * 0.2, container.bounds.top + size * 0.8)
+                        ]);
+                        this.ctx.strokeStyle = asString(INPUT_COLOR);
+                        this.ctx.lineWidth = Math.max(1, size * 0.08);
+                        this.ctx.lineCap = 'round';
+                        this.ctx.stroke();
+                    } else {
+                        // Render default tick/checkmark symbol
+                        this.path([
+                            new Vector(container.bounds.left + size * 0.39363, container.bounds.top + size * 0.79),
+                            new Vector(container.bounds.left + size * 0.16, container.bounds.top + size * 0.5549),
+                            new Vector(container.bounds.left + size * 0.27347, container.bounds.top + size * 0.44071),
+                            new Vector(container.bounds.left + size * 0.39694, container.bounds.top + size * 0.5649),
+                            new Vector(container.bounds.left + size * 0.72983, container.bounds.top + size * 0.23),
+                            new Vector(container.bounds.left + size * 0.84, container.bounds.top + size * 0.34085),
+                            new Vector(container.bounds.left + size * 0.39363, container.bounds.top + size * 0.79)
+                        ]);
 
-                    this.ctx.fillStyle = asString(INPUT_COLOR);
-                    this.ctx.fill();
+                        this.ctx.fillStyle = asString(INPUT_COLOR);
+                        this.ctx.fill();
+                    }
+                    
                     this.ctx.restore();
                 }
             } else if (container.type === RADIO) {
